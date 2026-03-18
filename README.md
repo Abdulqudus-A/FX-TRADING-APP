@@ -320,26 +320,27 @@ sequenceDiagram
 ---
 
 ### 4. Trade Flow (with Spread)
+
 ```mermaid
 flowchart TD
-    A([POST /wallet/trade<br/>{ direction, currency, amount }]) --> B[Validate currency ≠ NGN]
-    B --> C[FxService.getRate NGN→currency<br/>e.g. midRate = 0.00064 USD/NGN]
-    C --> D{Direction?}
+    A([POST /wallet/trade\n{ direction, currency, amount }]) --> B[Validate currency ≠ NGN]
+    B --> C[FxService.getRate NGN→currency\ne.g. midRate = 0.00064 USD/NGN]
+    C --> D{direction?}
 
-    D -- BUY --> E["effectiveRate = midRate - spread<br/>(user gets fewer units)"]
-    D -- SELL --> F["effectiveRate = 1 / (midRate + spread)<br/>(user gets slightly less NGN)"]
+    D -- BUY\nSpend NGN → get foreign --> E["effectiveRate = midRate − spread\n(user gets slightly fewer units)"]
+    D -- SELL\nSpend foreign → get NGN --> F["effectiveRate = 1 ÷ (midRate + spread)\n(user gets slightly less NGN)"]
 
-    E --> G[fromCurrency = NGN<br/>toAmount = amount * effectiveRate - fee]
-    F --> H[fromCurrency = foreign currency<br/>toAmount = amount * effectiveRate - fee]
+    E --> G[fromCurrency = NGN\ntoAmount = amount × effectiveRate − fee]
+    F --> H[fromCurrency = foreign currency\ntoAmount = amount × effectiveRate − fee]
 
     G --> I
     H --> I[BEGIN TX · REPEATABLE READ]
-    I --> J[SELECT from_balance FOR UPDATE]
-    J --> K{balance >= fromAmount?}
+    I --> J[SELECT from_balance FOR UPDATE 🔒]
+    J --> K{balance\n≥ fromAmount?}
     K -- No --> L([400 Insufficient Balance])
-    K -- Yes --> M[UPDATE from_balance -= fromAmount]
+    K -- Yes --> M[UPDATE from_balance −= fromAmount]
     M --> N[UPSERT to_balance += toAmount]
-    N --> O[INSERT transaction<br/>type=TRADE, midRate, effectiveRate,<br/>spread, spreadPct, fee]
+    N --> O[INSERT transaction\ntype=TRADE, midRate, effectiveRate,\nspread, spreadPct, fee]
     O --> P[COMMIT]
     P --> Q([200 Transaction record])
 
