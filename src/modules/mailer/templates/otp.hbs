@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Verify Your Email</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }
+    .container { max-width: 560px; margin: 40px auto; background: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .header { background-color: #1a56db; padding: 32px 40px; text-align: center; }
+    .header h1 { color: #ffffff; margin: 0; font-size: 24px; }
+    .body { padding: 32px 40px; }
+    .body p { color: #374151; font-size: 15px; line-height: 1.6; margin: 0 0 16px; }
+    .otp-box { background: #f0f4ff; border: 1px dashed #1a56db; border-radius: 8px; text-align: center; padding: 20px; margin: 24px 0; }
+    .otp-code { font-size: 40px; font-weight: bold; letter-spacing: 12px; color: #1a56db; }
+    .expiry { font-size: 13px; color: #6b7280; margin-top: 8px; }
+    .footer { background: #f9fafb; padding: 20px 40px; text-align: center; }
+    .footer p { color: #9ca3af; font-size: 12px; margin: 0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>FX Trading App</h1>
+    </div>
+    <div class="body">
+      <p>Hi{{#if firstName}} {{firstName}}{{/if}},</p>
+      <p>Use the one-time passcode below to verify your email address. This code expires in <strong>10 minutes</strong>.</p>
+      <div class="otp-box">
+        <div class="otp-code">{{otpCode}}</div>
+        <div class="expiry">Expires in 10 minutes</div>
+      </div>
+      <p>If you did not create an account with FX Trading App, you can safely ignore this email.</p>
+      <p>— The FX Trading Team</p>
+    </div>
+    <div class="footer">
+      <p>This is an automated message. Please do not reply to this email.</p>
+    </div>
+  </div>
+</body>
+</html>
